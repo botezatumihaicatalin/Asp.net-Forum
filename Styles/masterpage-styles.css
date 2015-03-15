@@ -1,0 +1,50 @@
+﻿.master-navbar {
+    background-color: blue;
+}
+
+.master-navbar-button {
+    margin-left: 0.5em;
+    margin-top: 0.3em;
+    height: 2.3em;
+    width: auto;
+}
+
+.master-login-control tbody tr td{
+    padding: 0.3em 0.1em 0.3em 0.1em
+}
+
+.master-user-data {
+    padding-top: 1em;
+    padding-right: 0.9em;
+    font-family: Tahoma;
+    font-size: 1em;
+    color: white;
+}
+
+.display-inline {
+    display: inline;
+}
+
+.ui-dialog > .ui-widget-header {
+    color: white;
+}
+
+.background-darkerblue {
+    background-color: #1E82D7;
+}
+
+.background-black {
+    background-color: black;
+}
+
+.no-border-radius {
+    border-radius: 0px;
+}
+
+.navbar a {
+    color: whitesmoke!important;
+}
+
+.navbar a:hover {
+    color: white!important;
+}

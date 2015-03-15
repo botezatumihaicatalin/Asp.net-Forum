@@ -1,0 +1,405 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="NavbarMasterPage.master.cs"
+    Inherits="NavbarMasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Master title</title>
+    <link href="Styles/reset.css" rel="stylesheet" type="text/css" />
+    <link href="Content/themes/JQueryUI/all.css" rel="stylesheet" type="text/css" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="Styles/masterpage-styles.css" rel="stylesheet" type="text/css" />
+    <script src="Scripts/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <script src="Scripts/jquery-ui-1.11.2.min.js" type="text/javascript"></script>
+    <script src="Scripts/tinymce/tinymce.min.js" type="text/javascript"></script>
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <script type="text/javascript">
+        $(function () {
+            var loginDialog = $("#" + "<%= dLoginDialog.ClientID %>").dialog({
+                autoOpen: false,
+                modal: true,
+                draggable: true,
+                height: "auto",
+                width: "auto",
+                resizable: false
+            });
+
+            var registrationDialog = $("#" + "<%= dRegistrationDialog.ClientID %>").dialog({
+                autoOpen: false,
+                modal: true,
+                draggable: true,
+                height: "auto",
+                width: "auto",
+                resizable: false
+            });
+
+            loginDialog.parent().appendTo($("form:first"));
+            registrationDialog.parent().appendTo($("form:first"));
+
+            $(".datepicker").each(function () {
+                var existingValue = $(this).val();
+                $(this).datepicker({
+                    showButtonPanel: true,
+                    changeMonth: true,
+                    changeYear: true,
+                    minDate: "-100Y",
+                    maxDate: "+0D"
+                });
+                $(this).datepicker("option", "dateFormat", "dd MM yy");
+                $(this).datepicker("setDate", existingValue);
+            });
+
+            tinyMCE.init({
+                selector: ".rich-text-editor",
+            });
+
+        });
+    </script>
+    <asp:ContentPlaceHolder ID="HeadPlaceHolder" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div id="dRegistrationDialog" title="Register dialog" runat="server">
+        <asp:CreateUserWizard ID="cuwRegister" runat="server" OnContinueButtonClick="CloseRegisterDialog"
+            OnCreateUserError="OpenRegisterDialog" OnFinishButtonClick="CloseRegisterDialog"
+            OnNextButtonClick="OpenRegisterDialog" OnPreviousButtonClick="OpenRegisterDialog"
+            OnActiveStepChanged="OpenRegisterDialog" OnCreatedUser="RegistrationDialogOnUserCreated"
+            PasswordRegularExpressionErrorMessage="Password length should be minimum 6."
+            CssClass="master-login-control">
+            <WizardSteps>
+                <asp:CreateUserWizardStep runat="server">
+                    <ContentTemplate>
+                        <table style="font-size: 100%;">
+                            <tr>
+                                <td align="center" colspan="3">
+                                    <div class="container-fluid padding-bottom10">
+                                        <asp:Label ID="lblSignUp" Font-Size="Large" Font-Bold="True" runat="server">
+                                            Sign Up for Your New Account
+                                        </asp:Label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <div style="padding-right: 5px;">
+                                        <asp:Label ID="lblUserNameLabel" runat="server" AssociatedControlID="UserName">User Name</asp:Label>
+                                        <asp:Label ID="lblUserNameMandatory" runat="server" ForeColor="Red">*</asp:Label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="UserName" runat="server" CssClass="form-control display-inline"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <div style="padding-left: 5px;">
+                                        <asp:RequiredFieldValidator ID="rfvUserNameRequired" runat="server" ControlToValidate="UserName"
+                                            Display="Dynamic" ToolTip="User Name is required." ValidationGroup="cuwRegister">User Name is required.</asp:RequiredFieldValidator>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <div style="padding-right: 5px;">
+                                        <asp:Label ID="lblPasswordLabel" runat="server" AssociatedControlID="Password">Password</asp:Label>
+                                        <asp:Label ID="lblPasswordMandatory" runat="server" ForeColor="Red">*</asp:Label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="Password" runat="server" TextMode="Password" CssClass="form-control display-inline"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <div style="padding-left: 5px;">
+                                        <asp:RequiredFieldValidator ID="rfvPasswordRequired" runat="server" ControlToValidate="Password"
+                                            Display="Dynamic" ToolTip="Password is required." ValidationGroup="cuwRegister">Password is required.</asp:RequiredFieldValidator>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <div style="padding-right: 5px;">
+                                        <asp:Label ID="lblConfirmPasswordLabel" runat="server" AssociatedControlID="ConfirmPassword">Confirm Password</asp:Label>
+                                        <asp:Label ID="lblConfirmPasswordMantatory" runat="server" ForeColor="Red">*</asp:Label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="ConfirmPassword" runat="server" TextMode="Password" CssClass="form-control display-inline"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <div style="padding-left: 5px;">
+                                        <asp:RequiredFieldValidator ID="rfvConfirmPasswordRequired" runat="server" ControlToValidate="ConfirmPassword"
+                                            Display="Dynamic" ToolTip="Confirm Password is required." ValidationGroup="cuwRegister">Confirm Password is required.</asp:RequiredFieldValidator>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <div style="padding-right: 5px;">
+                                        <asp:Label ID="lblFirstName" Font-Bold="True" runat="server">First name</asp:Label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="tbFirstName" runat="server" CssClass="form-control display-inline"></asp:TextBox>
+                                </td>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <div style="padding-right: 5px;">
+                                        <asp:Label ID="lblLastName" Font-Bold="True" runat="server">Last name</asp:Label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="tbLastName" runat="server" CssClass="form-control display-inline"></asp:TextBox>
+                                </td>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <div style="padding-right: 5px;">
+                                        <asp:Label ID="lblBirthDate" Font-Bold="True" runat="server">Birth date</asp:Label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="tbBirthDate" runat="server" CssClass="form-control display-inline datepicker"></asp:TextBox>
+                                </td>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <div style="padding-right: 5px;">
+                                        <asp:Label ID="lblEmailLabel" runat="server" AssociatedControlID="Email">E-mail</asp:Label>
+                                        <asp:Label ID="lblEmailMandatory" runat="server" ForeColor="Red">*</asp:Label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="Email" runat="server" CssClass="form-control display-inline"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <div style="padding-left: 5px;">
+                                        <asp:RequiredFieldValidator ID="rfvEmailRequired" runat="server" ControlToValidate="Email"
+                                            Display="Dynamic" ToolTip="E-mail is required." ValidationGroup="cuwRegister">E-mail is required.</asp:RequiredFieldValidator>
+                                        <asp:RegularExpressionValidator ID="revEmail" runat="server" ValidationExpression="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+                                            ControlToValidate="Email" Display="Dynamic" ValidationGroup="cuwRegister">
+                                            Email must be like name@domain.com
+                                        </asp:RegularExpressionValidator>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <div style="padding-right: 5px;">
+                                        <asp:Label ID="lblQuestionLabel" runat="server" AssociatedControlID="Question">Security Question</asp:Label>
+                                        <asp:Label ID="lblQuestionMandatory" runat="server" ForeColor="Red">*</asp:Label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="Question" runat="server" CssClass="form-control display-inline"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <div style="padding-left: 5px;">
+                                        <asp:RequiredFieldValidator ID="rfvQuestionRequired" runat="server" ControlToValidate="Question"
+                                            Display="Dynamic" ToolTip="Security question is required." ValidationGroup="cuwRegister">Security question is required.</asp:RequiredFieldValidator>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <div style="padding-right: 5px;">
+                                        <asp:Label ID="lblAnswerLabel" runat="server" AssociatedControlID="Answer">Security Answer</asp:Label>
+                                        <asp:Label ID="lblAnswerMandatory" runat="server" ForeColor="Red">*</asp:Label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="Answer" runat="server" CssClass="form-control display-inline"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <div style="padding-left: 5px;">
+                                        <asp:RequiredFieldValidator ID="rfvAnswerRequired" runat="server" ControlToValidate="Answer"
+                                            Display="Dynamic" ToolTip="Security answer is required." ValidationGroup="cuwRegister">Security answer is required.</asp:RequiredFieldValidator>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" colspan="2">
+                                    <asp:CompareValidator ID="PasswordCompare" runat="server" ControlToCompare="Password"
+                                        ControlToValidate="ConfirmPassword" Display="Dynamic" ErrorMessage="The Password and Confirmation Password must match."
+                                        ValidationGroup="cuwRegister"></asp:CompareValidator>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" colspan="2" style="color: Red;">
+                                    <asp:Literal ID="ErrorMessage" runat="server" EnableViewState="False"></asp:Literal>
+                                </td>
+                            </tr>
+                        </table>
+                    </ContentTemplate>
+                    <CustomNavigationTemplate>
+                        <table style="width: 100%; height: 100%;">
+                            <tr align="right">
+                                <td align="right" colspan="0">
+                                    <asp:Button ID="StepNextButton" runat="server" CommandName="MoveNext" Text="Create User"
+                                        ValidationGroup="cuwRegister" CssClass="btn btn-primary" />
+                                </td>
+                            </tr>
+                        </table>
+                    </CustomNavigationTemplate>
+                </asp:CreateUserWizardStep>
+                <asp:CompleteWizardStep runat="server">
+                    <ContentTemplate>
+                        <table style="font-size: 100%;">
+                            <tr>
+                                <td align="center" colspan="2">
+                                    Complete
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Your account has been successfully created.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" colspan="2">
+                                    <asp:Button ID="ContinueButton" runat="server" CausesValidation="False" CommandName="Continue"
+                                        Text="Continue" ValidationGroup="cuwRegister" CssClass="btn btn-primary" />
+                                </td>
+                            </tr>
+                        </table>
+                    </ContentTemplate>
+                </asp:CompleteWizardStep>
+            </WizardSteps>
+            <FinishNavigationTemplate>
+                <asp:Button ID="FinishButton" runat="server" CommandName="MoveComplete" Text="Finish"
+                    CssClass="btn btn-info" />
+            </FinishNavigationTemplate>
+        </asp:CreateUserWizard>
+    </div>
+    <div id="dLoginDialog" title="Login dialog" runat="server">
+        <asp:LoginView ID="lvLoginDialogLoginView" runat="server">
+            <AnonymousTemplate>
+                <asp:Login ID="lgnLogin" runat="server" OnLoggedIn="CloseLoginDialog" OnLoginError="OpenLoginDialog"
+                    CssClass="master-login-control">
+                    <LayoutTemplate>
+                        <table style="border-collapse: collapse;">
+                            <tr>
+                                <td align="right">
+                                    <div style="padding-right: 5px;">
+                                        <asp:Label ID="UserNameLabel" runat="server" AssociatedControlID="UserName">User Name</asp:Label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="UserName" runat="server" CssClass="form-control display-inline"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName"
+                                        ErrorMessage="User Name is required." ToolTip="User Name is required." ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <div style="padding-right: 5px;">
+                                        <asp:Label ID="PasswordLabel" runat="server" AssociatedControlID="Password">Password:</asp:Label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="Password" runat="server" TextMode="Password" CssClass="form-control display-inline"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password"
+                                        ErrorMessage="Password is required." ToolTip="Password is required." ValidationGroup="ctl00$Login1">*</asp:RequiredFieldValidator>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <asp:CheckBox ID="RememberMe" runat="server" Text="Remember me next time." />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" colspan="2" style="color: Red;">
+                                    <asp:Literal ID="FailureText" runat="server" EnableViewState="False"></asp:Literal>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" colspan="2">
+                                    <asp:Button ID="btnLogin" runat="server" CommandName="Login" Text="Log In" ValidationGroup="ctl00$Login1"
+                                        CssClass="btn btn-primary" />
+                                </td>
+                            </tr>
+                        </table>
+                    </LayoutTemplate>
+                </asp:Login>
+            </AnonymousTemplate>
+        </asp:LoginView>
+    </div>
+    <nav class="navbar navbar-inverse background-darkerblue no-border-radius">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="MainPage.aspx">Forum</a>
+            </div>
+            <div class="navbar-form nav navbar-nav">
+                <div class="input-group">
+                    <asp:TextBox ID="tbSearch" runat="server" CssClass="form-control" Placeholder="Search"></asp:TextBox>
+                    <asp:LinkButton ID="lbSearch" runat="server" CssClass="input-group-addon btn btn-default" BackColor="#4d4d4d" BorderColor="#4d4d4d" OnClick="SearchClick">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </asp:LinkButton>
+                </div>
+            </div>
+            
+            <div>
+                <ul class="nav navbar-nav">
+                    <li>
+                        <asp:LoginView ID="lvLoggedIn" runat="server">
+                            <AnonymousTemplate>
+                                <a id="A1" href="#" runat="server" onclick="$('#dLoginDialog').dialog('open');">
+                                    Sign in
+                                </a>
+                            </AnonymousTemplate>
+                        </asp:LoginView>
+                    </li>
+                    <li>
+                        <a id="A2" href="#" runat="server" onclick="$('#dRegistrationDialog').dialog('open');">
+                            Register
+                        </a>
+                    </li>
+                    <li>
+                        <asp:LoginView ID="lvAdminUserPanel" runat="server">
+                            <RoleGroups>
+                                <asp:RoleGroup Roles="administrator">
+                                    <ContentTemplate>
+                                        <a id="A3" href="~/AdminUserPanel.aspx" runat="server">
+                                            Users panel
+                                        </a>
+                                    </ContentTemplate>
+                                </asp:RoleGroup>
+                            </RoleGroups>
+                        </asp:LoginView>
+                    </li>
+                </ul>
+                <asp:LoginView ID="lvLoggedInUser" runat="server">
+                    <LoggedInTemplate>
+                        <div id = "dUserData" runat="server" class="pull-right padding-top10 padding-bottom5">
+                            <asp:Image ID = "imgUserImage" runat="server" Height="30px" Width="30px" />
+                            <asp:Label ID = "lblUserData" ForeColor="white" runat="server">
+                                Hello , <asp:HyperLink ID = "hlUserLink" Font-Bold="True" runat="server"><asp:LoginName ID="lnUsername" runat="server" /></asp:HyperLink>
+                            </asp:Label>
+                            <asp:LoginStatus ID="lsLoginStatusText" LogoutText="(Logout)" runat="server" ForeColor="gray"/>
+                        </div>
+                    </LoggedInTemplate>
+                </asp:LoginView>
+            </div>
+        </div>
+    </nav>
+    <div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>
